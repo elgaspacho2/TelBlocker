@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bloqueur de télémétrie</string>
+
+    <string name="status_on">Protection active · %1$d appli(s) filtrée(s)</string>
+    <string name="status_off">Protection désactivée</string>
+    <string name="intro">Cochez les applis dont vous voulez bloquer la télémétrie. Leurs requêtes DNS vers des domaines de pistage connus seront bloquées ; le reste de leur trafic n’est pas touché. Appui long sur une appli pour voir son journal.</string>
+    <string name="start">Activer la protection</string>
+    <string name="stop">Désactiver la protection</string>
+    <string name="open_log">Journal</string>
+    <string name="open_domains">Domaines</string>
+    <string name="search_hint">Rechercher une appli</string>
+    <string name="show_system">Afficher les applis système</string>
+    <string name="loading">Chargement des applis…</string>
+    <string name="no_apps">Aucune appli trouvée</string>
+    <string name="app_details_blocked">%1$s · %2$d requête(s) bloquée(s)</string>
+    <string name="select_first">Cochez d’abord au moins une appli.</string>
+    <string name="vpn_refused">Autorisation VPN refusée : la protection ne peut pas démarrer.</string>
+
+    <string name="log_title">Journal</string>
+    <string name="log_header_all">Requêtes DNS de toutes les applis filtrées. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
+    <string name="log_header_app">Requêtes DNS de %1$s. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
+    <string name="only_blocked">Seulement les blocages</string>
+    <string name="clear">Effacer</string>
+    <string name="log_empty">Aucune requête pour l’instant. Activez la protection puis utilisez les applis filtrées.</string>
+    <string name="log_blocked">%1$s · BLOQUÉ</string>
+    <string name="log_allowed">%1$s · autorisé</string>
+    <string name="unknown_app">Appli inconnue</string>
+    <string name="block_domain">Bloquer %1$s</string>
+    <string name="block_domain_all">Bloquer %1$s et tous ses sous-domaines</string>
+    <string name="allow_domain">Autoriser %1$s (exception)</string>
+    <string name="allow_domain_all">Autoriser %1$s et tous ses sous-domaines</string>
+    <string name="rule_saved">Règle enregistrée. Certaines applis gardent un cache DNS : redémarrez-les si besoin.</string>
+
+    <string name="domains_title">Domaines</string>
+    <string name="builtin_info">%1$d domaines de télémétrie intégrés (Firebase, Google Analytics, AppsFlyer, Adjust, Sentry, Crashlytics, Mixpanel…). Leurs sous-domaines sont aussi bloqués.</string>
+    <string name="show_builtin">Voir la liste intégrée</string>
+    <string name="builtin_title">Liste intégrée</string>
+    <string name="custom_blocked_label">Domaines bloqués en plus (un par ligne)</string>
+    <string name="custom_allowed_label">Exceptions, jamais bloquées (un par ligne). Utile si une appli ne fonctionne plus.</string>
+    <string name="domain_hint">exemple.com</string>
+    <string name="save">Enregistrer</string>
+</resources>

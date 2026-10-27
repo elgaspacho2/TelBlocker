@@ -1,0 +1,67 @@
+# Built-in telemetry / analytics / crash-reporting domains.
+# Subdomains are blocked too. One domain per line, "#" starts a comment.
+
+# Google / Firebase
+app-measurement.com
+google-analytics.com
+analytics.google.com
+googletagmanager.com
+crashlytics.com
+firebase-settings.crashlytics.com
+crashlyticsreports-pa.googleapis.com
+firebaselogging-pa.googleapis.com
+firebaselogging.googleapis.com
+
+# Attribution / marketing analytics
+adjust.com
+adjust.io
+appsflyer.com
+appsflyersdk.com
+kochava.com
+singular.net
+tenjin.io
+api2.branch.io
+mixpanel.com
+amplitude.com
+segment.io
+api.segment.io
+heapanalytics.com
+flurry.com
+appmetrica.yandex.net
+startup.mobile.yandex.net
+scorecardresearch.com
+quantserve.com
+clarity.ms
+uxcam.com
+smartlook.com
+
+# Crash & performance reporting
+sentry.io
+bugsnag.com
+api.instabug.com
+in.appcenter.ms
+mobile-collector.newrelic.com
+mobile-collector.eu01.nr-data.net
+browser-intake-datadoghq.com
+browser-intake-datadoghq.eu
+mobile-http-intake.logs.datadoghq.com
+data.emb-api.com
+api.raygun.io
+
+# Microsoft
+vortex.data.microsoft.com
+mobile.events.data.microsoft.com
+self.events.data.microsoft.com
+browser.events.data.msn.com
+
+# Unity
+cdp.cloud.unity3d.com
+perf-events.cloud.unity3d.com
+config.uca.cloud.unity3d.com
+
+# Device makers
+tracking.miui.com
+data.mistat.xiaomi.com
+data.mistat.intl.xiaomi.com
+metrics.data.hicloud.com
+dc.samsungelectronics.com
