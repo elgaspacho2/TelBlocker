@@ -21,6 +21,30 @@ Compatible Android 10 (API 29) à Android 17.
   exception si une appli ne fonctionne plus.
 - L'écran **Domaines** permet d'ajouter vos propres domaines bloqués et des exceptions.
 
+## Modes par appli
+
+Touchez une appli pour choisir :
+
+- **Télémétrie** : seuls les domaines de pistage connus sont bloqués.
+- **Tout bloquer** : l'appli n'a plus aucun accès réseau, ni en sortie ni en entrée.
+
+L'interrupteur **Couper les services Google** met d'un coup Google Play Services
+(`com.google.android.gms`), Google Services Framework (`com.google.android.gsf`) et le
+Play Store (`com.android.vending`) en mode « Tout bloquer ». Conséquences : plus de
+notifications push dans beaucoup d'applis, plus de Play Store, connexion Google /
+Google Pay / sauvegarde / localisation rapide hors service.
+
+Deux niveaux de blocage, choisis automatiquement :
+
+- **Blocage total** si *toutes* les applis filtrées sont en « Tout bloquer » : le VPN
+  capture l'ensemble de leur trafic et le jette (y compris les connexions vers des
+  adresses IP en dur). Les connexions déjà ouvertes sont coupées elles aussi.
+- **Blocage via DNS** si d'autres applis sont en mode « Télémétrie » en même temps :
+  toutes les requêtes DNS des applis coupées échouent, mais une connexion vers une
+  adresse IP en dur, ou déjà ouverte avant l'activation, peut passer. Android ne permet
+  qu'un seul VPN, avec les mêmes routes pour toutes ses applis : capturer tout le trafic
+  des applis en mode télémétrie demanderait de le relayer, ce que l'appli ne fait pas.
+
 ## Récupérer l'APK
 
 Chaque push qui modifie `TelemetryBlocker/` lance le workflow GitHub Actions

@@ -12,46 +12,77 @@ class UdpPacket(
     val payload: ByteArray,
 )
 
+/** A TCP or UDP packet that is not a DNS query (only seen when all traffic is routed to the tunnel). */
+class Flow(
+    val protocol: Int,
+    val src: InetAddress,
+    val dst: InetAddress,
+    val srcPort: Int,
+    val dstPort: Int,
+    val tcpSyn: Boolean,
+)
+
 /** Minimal IPv4/IPv6 + UDP parsing and building, just enough to answer DNS queries. */
 object Packets {
-    private const val PROTO_UDP = 17
+    const val PROTO_TCP = 6
+    const val PROTO_UDP = 17
+
+    private class IpHeader(val version: Int, val length: Int, val protocol: Int, val src: ByteArray, val dst: ByteArray)
+
+    private fun parseIp(buf: ByteArray, len: Int): IpHeader? {
+        if (len < 1) return null
+        return when ((buf[0].toInt() shr 4) and 0xF) {
+            4 -> if (len < 20) null else IpHeader(
+                version = 4,
+                length = (buf[0].toInt() and 0xF) * 4,
+                protocol = buf[9].toInt() and 0xFF,
+                src = buf.copyOfRange(12, 16),
+                dst = buf.copyOfRange(16, 20),
+            )
+            // Extension headers are not handled: the system resolver never sends them.
+            6 -> if (len < 40) null else IpHeader(
+                version = 6,
+                length = 40,
+                protocol = buf[6].toInt() and 0xFF,
+                src = buf.copyOfRange(8, 24),
+                dst = buf.copyOfRange(24, 40),
+            )
+            else -> null
+        }
+    }
 
     fun parseUdp(buf: ByteArray, len: Int): UdpPacket? {
-        if (len < 1) return null
-        val version = (buf[0].toInt() shr 4) and 0xF
-        val headerLen: Int
-        val proto: Int
-        val src: ByteArray
-        val dst: ByteArray
-        when (version) {
-            4 -> {
-                if (len < 20) return null
-                headerLen = (buf[0].toInt() and 0xF) * 4
-                proto = buf[9].toInt() and 0xFF
-                src = buf.copyOfRange(12, 16)
-                dst = buf.copyOfRange(16, 20)
-            }
-            6 -> {
-                if (len < 40) return null
-                // Extension headers are not handled: DNS queries from the system resolver never carry them.
-                headerLen = 40
-                proto = buf[6].toInt() and 0xFF
-                src = buf.copyOfRange(8, 24)
-                dst = buf.copyOfRange(24, 40)
-            }
-            else -> return null
-        }
-        if (proto != PROTO_UDP || len < headerLen + 8) return null
+        val ip = parseIp(buf, len) ?: return null
+        val headerLen = ip.length
+        if (ip.protocol != PROTO_UDP || len < headerLen + 8) return null
         val udpLen = u16(buf, headerLen + 4)
         val end = minOf(len, headerLen + udpLen)
         if (end < headerLen + 8) return null
         return UdpPacket(
-            ipVersion = version,
-            src = InetAddress.getByAddress(src),
-            dst = InetAddress.getByAddress(dst),
+            ipVersion = ip.version,
+            src = InetAddress.getByAddress(ip.src),
+            dst = InetAddress.getByAddress(ip.dst),
             srcPort = u16(buf, headerLen),
             dstPort = u16(buf, headerLen + 2),
             payload = buf.copyOfRange(headerLen + 8, end),
+        )
+    }
+
+    /** The TCP or UDP connection a packet belongs to; null for other protocols (ICMP...). */
+    fun parseFlow(buf: ByteArray, len: Int): Flow? {
+        val ip = parseIp(buf, len) ?: return null
+        val headerLen = ip.length
+        if ((ip.protocol != PROTO_TCP && ip.protocol != PROTO_UDP) || len < headerLen + 4) return null
+        // SYN without ACK: the first packet of a new TCP connection.
+        val tcpSyn = ip.protocol == PROTO_TCP && len >= headerLen + 14 &&
+            (buf[headerLen + 13].toInt() and 0x12) == 0x02
+        return Flow(
+            protocol = ip.protocol,
+            src = InetAddress.getByAddress(ip.src),
+            dst = InetAddress.getByAddress(ip.dst),
+            srcPort = u16(buf, headerLen),
+            dstPort = u16(buf, headerLen + 2),
+            tcpSyn = tcpSyn,
         )
     }
 

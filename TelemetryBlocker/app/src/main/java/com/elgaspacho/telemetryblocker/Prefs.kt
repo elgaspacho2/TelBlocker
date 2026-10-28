@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 object Prefs {
     private const val FILE = "settings"
     private const val KEY_APPS = "selected_packages"
+    private const val KEY_BLOCK_ALL_APPS = "block_all_packages"
     private const val KEY_BLOCKED = "custom_blocked"
     private const val KEY_ALLOWED = "custom_allowed"
 
@@ -18,8 +19,13 @@ object Prefs {
     private fun putSet(ctx: Context, key: String, value: Set<String>) =
         prefs(ctx).edit().putStringSet(key, HashSet(value)).apply()
 
+    /** Apps whose telemetry domains are blocked. */
     fun selectedPackages(ctx: Context) = getSet(ctx, KEY_APPS)
     fun setSelectedPackages(ctx: Context, value: Set<String>) = putSet(ctx, KEY_APPS, value)
+
+    /** Apps cut off from the network entirely. */
+    fun blockAllPackages(ctx: Context) = getSet(ctx, KEY_BLOCK_ALL_APPS)
+    fun setBlockAllPackages(ctx: Context, value: Set<String>) = putSet(ctx, KEY_BLOCK_ALL_APPS, value)
 
     fun customBlocked(ctx: Context) = getSet(ctx, KEY_BLOCKED)
     fun setCustomBlocked(ctx: Context, value: Set<String>) = putSet(ctx, KEY_BLOCKED, value)

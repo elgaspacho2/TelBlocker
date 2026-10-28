@@ -2,9 +2,11 @@ package com.elgaspacho.telemetryblocker
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.VpnService
 import android.os.Bundle
@@ -17,15 +19,19 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 
 class MainActivity : Activity() {
 
     private class AppEntry(val pkg: String, val label: String, val system: Boolean, val info: ApplicationInfo)
+
+    private enum class Mode { OFF, TELEMETRY, BLOCK_ALL }
 
     private companion object {
         const val REQUEST_VPN = 1
@@ -34,12 +40,14 @@ class MainActivity : Activity() {
 
     private lateinit var statusText: TextView
     private lateinit var toggleButton: Button
+    private lateinit var googleSwitch: Switch
     private lateinit var search: EditText
     private lateinit var showSystem: CheckBox
     private val adapter = AppAdapter()
     private val handler = Handler(Looper.getMainLooper())
     private var allApps: List<AppEntry> = emptyList()
-    private val selected = mutableSetOf<String>()
+    private val telemetryApps = mutableSetOf<String>()
+    private val blockAllApps = mutableSetOf<String>()
 
     private val refresher = object : Runnable {
         override fun run() {
@@ -49,13 +57,19 @@ class MainActivity : Activity() {
         }
     }
 
+    private val googleSwitchListener = CompoundButton.OnCheckedChangeListener { _, checked ->
+        if (checked) confirmBlockGoogle() else setGoogleBlocked(false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        selected += Prefs.selectedPackages(this)
+        blockAllApps += Prefs.blockAllPackages(this)
+        telemetryApps += Prefs.selectedPackages(this) - blockAllApps
 
         statusText = findViewById(R.id.status)
         toggleButton = findViewById(R.id.toggle)
+        googleSwitch = findViewById(R.id.google_switch)
         search = findViewById(R.id.search)
         showSystem = findViewById(R.id.show_system)
         val list = findViewById<ListView>(R.id.app_list)
@@ -75,7 +89,7 @@ class MainActivity : Activity() {
             override fun afterTextChanged(s: Editable?) = applyFilter()
         })
         showSystem.setOnCheckedChangeListener { _, _ -> applyFilter() }
-        list.setOnItemClickListener { _, _, position, _ -> toggleApp(adapter.getItem(position)) }
+        list.setOnItemClickListener { _, _, position, _ -> chooseMode(adapter.getItem(position)) }
         list.setOnItemLongClickListener { _, _, position, _ ->
             startActivity(
                 Intent(this, LogActivity::class.java)
@@ -84,6 +98,7 @@ class MainActivity : Activity() {
             true
         }
 
+        updateGoogleSwitch()
         loadApps()
     }
 
@@ -98,7 +113,7 @@ class MainActivity : Activity() {
     }
 
     private fun loadApps() {
-        val initiallySelected = selected.toSet()
+        val initiallySelected = telemetryApps + blockAllApps
         Thread {
             val pm = packageManager
             val apps = pm.getInstalledApplications(0)
@@ -126,19 +141,81 @@ class MainActivity : Activity() {
     private fun applyFilter() {
         val query = search.text.toString().trim().lowercase()
         adapter.setItems(allApps.filter {
-            (showSystem.isChecked || !it.system || it.pkg in selected) &&
+            (showSystem.isChecked || !it.system || modeOf(it.pkg) != Mode.OFF) &&
                 (query.isEmpty() || it.label.lowercase().contains(query) || it.pkg.contains(query))
         })
     }
 
-    private fun toggleApp(app: AppEntry) {
-        if (!selected.add(app.pkg)) selected.remove(app.pkg)
-        Prefs.setSelectedPackages(this, selected)
+    private fun modeOf(pkg: String) = when (pkg) {
+        in blockAllApps -> Mode.BLOCK_ALL
+        in telemetryApps -> Mode.TELEMETRY
+        else -> Mode.OFF
+    }
+
+    private fun setMode(packages: Collection<String>, mode: Mode) {
+        telemetryApps -= packages
+        blockAllApps -= packages
+        when (mode) {
+            Mode.TELEMETRY -> telemetryApps += packages
+            Mode.BLOCK_ALL -> blockAllApps += packages
+            Mode.OFF -> {}
+        }
+        Prefs.setSelectedPackages(this, telemetryApps)
+        Prefs.setBlockAllPackages(this, blockAllApps)
         adapter.notifyDataSetChanged()
+        updateGoogleSwitch()
         if (TelemetryVpnService.isRunning) {
             // Rebuild the tunnel so the new selection applies right away.
-            if (selected.isEmpty()) TelemetryVpnService.stop(this) else TelemetryVpnService.start(this)
+            if (telemetryApps.isEmpty() && blockAllApps.isEmpty()) {
+                TelemetryVpnService.stop(this)
+            } else {
+                TelemetryVpnService.start(this)
+            }
             refreshSoon()
+        }
+    }
+
+    private fun chooseMode(app: AppEntry) {
+        val modes = Mode.values()
+        val labels = arrayOf(
+            getString(R.string.mode_off),
+            getString(R.string.mode_telemetry),
+            getString(R.string.mode_block_all),
+        )
+        AlertDialog.Builder(this)
+            .setTitle(app.label)
+            .setSingleChoiceItems(labels, modeOf(app.pkg).ordinal) { dialog, which ->
+                setMode(listOf(app.pkg), modes[which])
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    /** The switch is on when every installed Google component is in "block everything" mode. */
+    private fun updateGoogleSwitch() {
+        val installed = GoogleServices.installed(this)
+        googleSwitch.setOnCheckedChangeListener(null)
+        googleSwitch.isEnabled = installed.isNotEmpty()
+        googleSwitch.isChecked = installed.isNotEmpty() && blockAllApps.containsAll(installed)
+        googleSwitch.setOnCheckedChangeListener(googleSwitchListener)
+    }
+
+    private fun confirmBlockGoogle() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.google_confirm_title)
+            .setMessage(R.string.google_confirm_message)
+            .setPositiveButton(R.string.google_confirm_ok) { _, _ -> setGoogleBlocked(true) }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> updateGoogleSwitch() }
+            .setOnCancelListener { updateGoogleSwitch() }
+            .show()
+    }
+
+    private fun setGoogleBlocked(blocked: Boolean) {
+        setMode(GoogleServices.installed(this), if (blocked) Mode.BLOCK_ALL else Mode.OFF)
+        applyFilter()
+        if (blocked && !TelemetryVpnService.isRunning) {
+            Toast.makeText(this, R.string.google_enable_hint, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -148,7 +225,7 @@ class MainActivity : Activity() {
             refreshSoon()
             return
         }
-        if (selected.isEmpty()) {
+        if (telemetryApps.isEmpty() && blockAllApps.isEmpty()) {
             Toast.makeText(this, R.string.select_first, Toast.LENGTH_LONG).show()
             return
         }
@@ -178,7 +255,12 @@ class MainActivity : Activity() {
 
     private fun updateStatus() {
         if (TelemetryVpnService.isRunning) {
-            statusText.text = getString(R.string.status_on, selected.size)
+            val summary = getString(R.string.status_on, telemetryApps.size, blockAllApps.size)
+            statusText.text = when {
+                blockAllApps.isEmpty() -> summary
+                TelemetryVpnService.firewallMode -> summary + "\n" + getString(R.string.status_firewall)
+                else -> summary + "\n" + getString(R.string.status_dns_only)
+            }
             toggleButton.setText(R.string.stop)
         } else {
             statusText.setText(R.string.status_off)
@@ -210,7 +292,21 @@ class MainActivity : Activity() {
             val blocked = QueryLog.blockedCount(app.pkg)
             view.findViewById<TextView>(R.id.details).text =
                 if (blocked > 0) getString(R.string.app_details_blocked, app.pkg, blocked) else app.pkg
-            view.findViewById<CheckBox>(R.id.check).isChecked = app.pkg in selected
+            val badge = view.findViewById<TextView>(R.id.mode)
+            when (modeOf(app.pkg)) {
+                Mode.OFF -> {
+                    badge.setText(R.string.badge_off)
+                    badge.setTextColor(Color.GRAY)
+                }
+                Mode.TELEMETRY -> {
+                    badge.setText(R.string.badge_telemetry)
+                    badge.setTextColor(Color.rgb(0x19, 0x76, 0xD2))
+                }
+                Mode.BLOCK_ALL -> {
+                    badge.setText(R.string.badge_block_all)
+                    badge.setTextColor(Color.rgb(0xD3, 0x2F, 0x2F))
+                }
+            }
             return view
         }
     }

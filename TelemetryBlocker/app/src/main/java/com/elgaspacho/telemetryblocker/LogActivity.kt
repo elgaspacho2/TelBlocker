@@ -89,6 +89,11 @@ class LogActivity : Activity() {
 
     /** Lets the user block an allowed domain, or add an exception for a blocked one. */
     private fun showActions(entry: QueryLog.Entry) {
+        if (entry.connection) {
+            // A raw address: domain rules don't apply, the app is blocked as a whole.
+            Toast.makeText(this, R.string.connection_info, Toast.LENGTH_LONG).show()
+            return
+        }
         val targets = listOfNotNull(entry.domain, Domains.parentDomain(entry.domain))
         val actions = targets.map { domain ->
             val label = when {
@@ -130,7 +135,11 @@ class LogActivity : Activity() {
             val entry = items[position]
             val status = view.findViewById<TextView>(R.id.log_status)
             status.text = getString(
-                if (entry.blocked) R.string.log_blocked else R.string.log_allowed,
+                when {
+                    entry.connection -> R.string.log_connection_blocked
+                    entry.blocked -> R.string.log_blocked
+                    else -> R.string.log_allowed
+                },
                 timeFormat.format(Date(entry.time)),
             )
             status.setTextColor(if (entry.blocked) Color.rgb(0xD3, 0x2F, 0x2F) else Color.rgb(0x38, 0x8E, 0x3C))

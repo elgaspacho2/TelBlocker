@@ -2,9 +2,11 @@
 <resources>
     <string name="app_name">Bloqueur de télémétrie</string>
 
-    <string name="status_on">Protection active · %1$d appli(s) filtrée(s)</string>
+    <string name="status_on">Protection active · %1$d appli(s) filtrée(s) · %2$d appli(s) coupée(s)</string>
+    <string name="status_firewall">Blocage total : tout le trafic des applis coupées est bloqué.</string>
+    <string name="status_dns_only">Des applis sont aussi en mode télémétrie : les applis coupées sont bloquées via le DNS seulement (une connexion vers une adresse IP en dur peut passer). Pour un blocage total, n’utilisez que le mode « Tout bloquer ».</string>
     <string name="status_off">Protection désactivée</string>
-    <string name="intro">Cochez les applis dont vous voulez bloquer la télémétrie. Leurs requêtes DNS vers des domaines de pistage connus seront bloquées ; le reste de leur trafic n’est pas touché. Appui long sur une appli pour voir son journal.</string>
+    <string name="intro">Touchez une appli pour choisir son mode : « Télémétrie » bloque seulement les domaines de pistage connus, « Tout bloquer » lui coupe tout accès réseau. Appui long sur une appli pour voir son journal.</string>
     <string name="start">Activer la protection</string>
     <string name="stop">Désactiver la protection</string>
     <string name="open_log">Journal</string>
@@ -14,17 +16,33 @@
     <string name="loading">Chargement des applis…</string>
     <string name="no_apps">Aucune appli trouvée</string>
     <string name="app_details_blocked">%1$s · %2$d requête(s) bloquée(s)</string>
-    <string name="select_first">Cochez d’abord au moins une appli.</string>
+    <string name="select_first">Choisissez d’abord un mode pour au moins une appli.</string>
+
+    <string name="mode_off">Aucun filtrage</string>
+    <string name="mode_telemetry">Bloquer la télémétrie</string>
+    <string name="mode_block_all">Tout bloquer (aucune connexion entrante ni sortante)</string>
+    <string name="badge_off">—</string>
+    <string name="badge_telemetry">TÉLÉMÉTRIE</string>
+    <string name="badge_block_all">COUPÉE</string>
+
+    <string name="google_switch">Couper les services Google</string>
+    <string name="google_switch_details">Google Play Services, Google Services Framework et Play Store : aucune télémétrie ni communication, dans un sens comme dans l’autre.</string>
+    <string name="google_confirm_title">Couper les services Google ?</string>
+    <string name="google_confirm_message">Google Play Services, Google Services Framework et le Play Store n’auront plus aucun accès réseau.\n\nConséquences possibles :\n• plus de notifications push dans beaucoup d’applis (messageries, banques…)\n• plus de téléchargements ni de mises à jour depuis le Play Store\n• connexion « avec Google », Google Pay/Wallet, sauvegarde, Localiser mon appareil et localisation rapide hors service\n• certaines applis peuvent refuser de démarrer\n\nVous pouvez revenir en arrière à tout moment avec cet interrupteur.</string>
+    <string name="google_confirm_ok">Couper</string>
+    <string name="google_enable_hint">Services Google en mode « Tout bloquer ». Activez la protection pour appliquer le blocage.</string>
     <string name="vpn_refused">Autorisation VPN refusée : la protection ne peut pas démarrer.</string>
 
     <string name="log_title">Journal</string>
-    <string name="log_header_all">Requêtes DNS de toutes les applis filtrées. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
-    <string name="log_header_app">Requêtes DNS de %1$s. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
+    <string name="log_header_all">Requêtes DNS et connexions de toutes les applis filtrées. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
+    <string name="log_header_app">Requêtes DNS et connexions de %1$s. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
     <string name="only_blocked">Seulement les blocages</string>
     <string name="clear">Effacer</string>
     <string name="log_empty">Aucune requête pour l’instant. Activez la protection puis utilisez les applis filtrées.</string>
     <string name="log_blocked">%1$s · BLOQUÉ</string>
     <string name="log_allowed">%1$s · autorisé</string>
+    <string name="log_connection_blocked">%1$s · CONNEXION BLOQUÉE</string>
+    <string name="connection_info">Connexion directe vers une adresse IP, bloquée parce que l’appli est en mode « Tout bloquer ».</string>
     <string name="unknown_app">Appli inconnue</string>
     <string name="block_domain">Bloquer %1$s</string>
     <string name="block_domain_all">Bloquer %1$s et tous ses sous-domaines</string>
