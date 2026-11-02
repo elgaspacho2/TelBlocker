@@ -1,6 +1,5 @@
 package com.elgaspacho.telemetryblocker
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -18,7 +17,7 @@ import android.widget.Toast
 import java.text.DateFormat
 import java.util.Date
 
-class LogActivity : Activity() {
+class LogActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_PACKAGE = "package"

@@ -1,6 +1,5 @@
 package com.elgaspacho.telemetryblocker
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Button
@@ -8,7 +7,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
-class DomainsActivity : Activity() {
+class DomainsActivity : BaseActivity() {
 
     private lateinit var blockedInput: EditText
     private lateinit var allowedInput: EditText

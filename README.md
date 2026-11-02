@@ -47,8 +47,12 @@ to any remote server. The VPN applies only to the apps you selected.
    **TelBlocker APK** run and download the `TelBlocker-apk` artifact.
 2. Unzip it and copy `app-debug.apk` to your phone.
 3. Open the APK and allow installs from your browser or file manager when asked.
-4. In the app, choose a mode for the apps you want, tap **Activer la protection**,
+4. In the app, choose a mode for the apps you want, tap **Turn protection on**,
    and accept Android's VPN request.
+
+The app is available in English and French. It follows the phone's language by
+default; change it with **Language** at the top of the main screen (or, on Android 13+,
+in the system settings under the app's language).
 
 ### Build it yourself
 

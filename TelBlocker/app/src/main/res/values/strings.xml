@@ -1,61 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Bloqueur de télémétrie</string>
+    <string name="app_name">Telemetry Blocker</string>
 
-    <string name="status_on">Protection active · %1$d appli(s) filtrée(s) · %2$d appli(s) coupée(s)</string>
-    <string name="status_firewall">Blocage total : tout le trafic des applis coupées est bloqué.</string>
-    <string name="status_dns_only">Des applis sont aussi en mode télémétrie : les applis coupées sont bloquées via le DNS seulement (une connexion vers une adresse IP en dur peut passer). Pour un blocage total, n’utilisez que le mode « Tout bloquer ».</string>
-    <string name="status_off">Protection désactivée</string>
-    <string name="intro">Touchez une appli pour choisir son mode : « Télémétrie » bloque seulement les domaines de pistage connus, « Tout bloquer » lui coupe tout accès réseau. Appui long sur une appli pour voir son journal.</string>
-    <string name="start">Activer la protection</string>
-    <string name="stop">Désactiver la protection</string>
-    <string name="open_log">Journal</string>
-    <string name="open_domains">Domaines</string>
-    <string name="search_hint">Rechercher une appli</string>
-    <string name="show_system">Afficher les applis système</string>
-    <string name="loading">Chargement des applis…</string>
-    <string name="no_apps">Aucune appli trouvée</string>
-    <string name="app_details_blocked">%1$s · %2$d requête(s) bloquée(s)</string>
-    <string name="select_first">Choisissez d’abord un mode pour au moins une appli.</string>
+    <string name="status_on">Protection on · %1$d app(s) filtered · %2$d app(s) cut off</string>
+    <string name="status_firewall">Full blocking: all traffic of the cut-off apps is blocked.</string>
+    <string name="status_dns_only">Some apps are also in telemetry mode: the cut-off apps are blocked through DNS only (a connection to a hard-coded IP address can get through). For full blocking, use only the “Block everything” mode.</string>
+    <string name="status_off">Protection off</string>
+    <string name="intro">Tap an app to choose its mode: “Telemetry” blocks only known tracking domains, “Block everything” cuts off all its network access. Long-press an app to see its log.</string>
+    <string name="start">Turn protection on</string>
+    <string name="stop">Turn protection off</string>
+    <string name="open_log">Log</string>
+    <string name="open_domains">Domains</string>
+    <string name="search_hint">Search apps</string>
+    <string name="show_system">Show system apps</string>
+    <string name="loading">Loading apps…</string>
+    <string name="no_apps">No apps found</string>
+    <string name="app_details_blocked">%1$s · %2$d request(s) blocked</string>
+    <string name="select_first">First choose a mode for at least one app.</string>
 
-    <string name="mode_off">Aucun filtrage</string>
-    <string name="mode_telemetry">Bloquer la télémétrie</string>
-    <string name="mode_block_all">Tout bloquer (aucune connexion entrante ni sortante)</string>
+    <string name="mode_off">No filtering</string>
+    <string name="mode_telemetry">Block telemetry</string>
+    <string name="mode_block_all">Block everything (no incoming or outgoing connection)</string>
     <string name="badge_off">—</string>
-    <string name="badge_telemetry">TÉLÉMÉTRIE</string>
-    <string name="badge_block_all">COUPÉE</string>
+    <string name="badge_telemetry">TELEMETRY</string>
+    <string name="badge_block_all">CUT OFF</string>
 
-    <string name="google_switch">Couper les services Google</string>
-    <string name="google_switch_details">Google Play Services, Google Services Framework et Play Store : aucune télémétrie ni communication, dans un sens comme dans l’autre.</string>
-    <string name="google_confirm_title">Couper les services Google ?</string>
-    <string name="google_confirm_message">Google Play Services, Google Services Framework et le Play Store n’auront plus aucun accès réseau.\n\nConséquences possibles :\n• plus de notifications push dans beaucoup d’applis (messageries, banques…)\n• plus de téléchargements ni de mises à jour depuis le Play Store\n• connexion « avec Google », Google Pay/Wallet, sauvegarde, Localiser mon appareil et localisation rapide hors service\n• certaines applis peuvent refuser de démarrer\n\nVous pouvez revenir en arrière à tout moment avec cet interrupteur.</string>
-    <string name="google_confirm_ok">Couper</string>
-    <string name="google_enable_hint">Services Google en mode « Tout bloquer ». Activez la protection pour appliquer le blocage.</string>
-    <string name="vpn_refused">Autorisation VPN refusée : la protection ne peut pas démarrer.</string>
+    <string name="google_switch">Cut off Google services</string>
+    <string name="google_switch_details">Google Play Services, Google Services Framework and Play Store: no telemetry and no communication, in either direction.</string>
+    <string name="google_confirm_title">Cut off Google services?</string>
+    <string name="google_confirm_message">Google Play Services, Google Services Framework and the Play Store will have no network access at all.\n\nPossible consequences:\n• no push notifications in many apps (messaging, banking…)\n• no downloads or updates from the Play Store\n• “Sign in with Google”, Google Pay/Wallet, backup, Find My Device and fast location stop working\n• some apps may refuse to start\n\nYou can undo this at any time with this switch.</string>
+    <string name="google_confirm_ok">Cut off</string>
+    <string name="google_enable_hint">Google services set to “Block everything”. Turn protection on to apply the block.</string>
+    <string name="vpn_refused">VPN permission denied: protection cannot start.</string>
 
-    <string name="log_title">Journal</string>
-    <string name="log_header_all">Requêtes DNS et connexions de toutes les applis filtrées. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
-    <string name="log_header_app">Requêtes DNS et connexions de %1$s. Touchez une ligne pour bloquer ou autoriser le domaine.</string>
-    <string name="only_blocked">Seulement les blocages</string>
-    <string name="clear">Effacer</string>
-    <string name="log_empty">Aucune requête pour l’instant. Activez la protection puis utilisez les applis filtrées.</string>
-    <string name="log_blocked">%1$s · BLOQUÉ</string>
-    <string name="log_allowed">%1$s · autorisé</string>
-    <string name="log_connection_blocked">%1$s · CONNEXION BLOQUÉE</string>
-    <string name="connection_info">Connexion directe vers une adresse IP, bloquée parce que l’appli est en mode « Tout bloquer ».</string>
-    <string name="unknown_app">Appli inconnue</string>
-    <string name="block_domain">Bloquer %1$s</string>
-    <string name="block_domain_all">Bloquer %1$s et tous ses sous-domaines</string>
-    <string name="allow_domain">Autoriser %1$s (exception)</string>
-    <string name="allow_domain_all">Autoriser %1$s et tous ses sous-domaines</string>
-    <string name="rule_saved">Règle enregistrée. Certaines applis gardent un cache DNS : redémarrez-les si besoin.</string>
+    <string name="log_title">Log</string>
+    <string name="log_header_all">DNS requests and connections of all filtered apps. Tap a line to block or allow the domain.</string>
+    <string name="log_header_app">DNS requests and connections of %1$s. Tap a line to block or allow the domain.</string>
+    <string name="only_blocked">Blocked only</string>
+    <string name="clear">Clear</string>
+    <string name="log_empty">No requests yet. Turn protection on, then use the filtered apps.</string>
+    <string name="log_blocked">%1$s · BLOCKED</string>
+    <string name="log_allowed">%1$s · allowed</string>
+    <string name="log_connection_blocked">%1$s · CONNECTION BLOCKED</string>
+    <string name="connection_info">Direct connection to an IP address, blocked because the app is in “Block everything” mode.</string>
+    <string name="unknown_app">Unknown app</string>
+    <string name="block_domain">Block %1$s</string>
+    <string name="block_domain_all">Block %1$s and all its subdomains</string>
+    <string name="allow_domain">Allow %1$s (exception)</string>
+    <string name="allow_domain_all">Allow %1$s and all its subdomains</string>
+    <string name="rule_saved">Rule saved. Some apps keep a DNS cache: restart them if needed.</string>
 
-    <string name="domains_title">Domaines</string>
-    <string name="builtin_info">%1$d domaines de télémétrie intégrés (Firebase, Google Analytics, AppsFlyer, Adjust, Sentry, Crashlytics, Mixpanel…). Leurs sous-domaines sont aussi bloqués.</string>
-    <string name="show_builtin">Voir la liste intégrée</string>
-    <string name="builtin_title">Liste intégrée</string>
-    <string name="custom_blocked_label">Domaines bloqués en plus (un par ligne)</string>
-    <string name="custom_allowed_label">Exceptions, jamais bloquées (un par ligne). Utile si une appli ne fonctionne plus.</string>
-    <string name="domain_hint">exemple.com</string>
-    <string name="save">Enregistrer</string>
+    <string name="domains_title">Domains</string>
+    <string name="builtin_info">%1$d built-in telemetry domains (Firebase, Google Analytics, AppsFlyer, Adjust, Sentry, Crashlytics, Mixpanel…). Their subdomains are blocked too.</string>
+    <string name="show_builtin">Show built-in list</string>
+    <string name="builtin_title">Built-in list</string>
+    <string name="custom_blocked_label">Extra blocked domains (one per line)</string>
+    <string name="custom_allowed_label">Exceptions, never blocked (one per line). Useful if an app stops working.</string>
+    <string name="domain_hint">example.com</string>
+    <string name="save">Save</string>
+
+    <string name="language">Language</string>
+    <string name="language_system">System default</string>
+    <!-- Each language is shown in its own name, whatever the current language. -->
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_french" translatable="false">Français</string>
 </resources>

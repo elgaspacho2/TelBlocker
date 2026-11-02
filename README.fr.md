@@ -54,6 +54,10 @@ choisies.
 4. Dans l'appli, choisissez un mode pour les applis voulues, touchez
    **Activer la protection** et acceptez la demande de VPN d'Android.
 
+L'appli existe en français et en anglais. Elle suit la langue du téléphone par défaut ;
+changez-la avec **Langue** en haut de l'écran principal (ou, sur Android 13+, dans les
+paramètres du système, rubrique langue de l'appli).
+
 ### Compiler soi-même
 
 Prérequis : JDK 17 et le SDK Android.

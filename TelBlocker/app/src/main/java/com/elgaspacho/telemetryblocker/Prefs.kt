@@ -9,6 +9,7 @@ object Prefs {
     private const val KEY_BLOCK_ALL_APPS = "block_all_packages"
     private const val KEY_BLOCKED = "custom_blocked"
     private const val KEY_ALLOWED = "custom_allowed"
+    private const val KEY_LANGUAGE = "language"
 
     private fun prefs(ctx: Context): SharedPreferences =
         ctx.getSharedPreferences(FILE, Context.MODE_PRIVATE)
@@ -32,6 +33,10 @@ object Prefs {
 
     fun customAllowed(ctx: Context) = getSet(ctx, KEY_ALLOWED)
     fun setCustomAllowed(ctx: Context, value: Set<String>) = putSet(ctx, KEY_ALLOWED, value)
+
+    /** In-app language tag, "" for the system language (only used before Android 13). */
+    fun language(ctx: Context): String = prefs(ctx).getString(KEY_LANGUAGE, null) ?: ""
+    fun setLanguage(ctx: Context, tag: String) = prefs(ctx).edit().putString(KEY_LANGUAGE, tag).apply()
 
     fun addBlocked(ctx: Context, domain: String) {
         setCustomBlocked(ctx, customBlocked(ctx) + domain)

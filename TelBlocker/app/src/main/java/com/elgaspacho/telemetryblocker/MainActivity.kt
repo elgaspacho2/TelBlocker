@@ -1,7 +1,6 @@
 package com.elgaspacho.telemetryblocker
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -14,6 +13,8 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -27,7 +28,7 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 
-class MainActivity : Activity() {
+class MainActivity : BaseActivity() {
 
     private class AppEntry(val pkg: String, val label: String, val system: Boolean, val info: ApplicationInfo)
 
@@ -110,6 +111,34 @@ class MainActivity : Activity() {
     override fun onPause() {
         handler.removeCallbacks(refresher)
         super.onPause()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId != R.id.menu_language) return super.onOptionsItemSelected(item)
+        chooseLanguage()
+        return true
+    }
+
+    private fun chooseLanguage() {
+        val labels = arrayOf(
+            getString(R.string.language_system),
+            getString(R.string.language_english),
+            getString(R.string.language_french),
+        )
+        val current = LocaleHelper.TAGS.indexOf(LocaleHelper.current(this)).coerceAtLeast(0)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.language)
+            .setSingleChoiceItems(labels, current) { dialog, which ->
+                dialog.dismiss()
+                if (which != current) LocaleHelper.set(this, LocaleHelper.TAGS[which])
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun loadApps() {
