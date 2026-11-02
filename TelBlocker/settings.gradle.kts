@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TelemetryBlocker"
+rootProject.name = "TelBlocker"
 include(":app")

@@ -47,15 +47,15 @@ Deux niveaux de blocage, choisis automatiquement :
 
 ## Récupérer l'APK
 
-Chaque push qui modifie `TelemetryBlocker/` lance le workflow GitHub Actions
-« TelemetryBlocker APK ». Dans l'onglet *Actions* du dépôt, ouvrez le dernier run et
-téléchargez l'artefact `TelemetryBlocker-apk` (zip contenant `app-debug.apk`).
+Chaque push qui modifie `TelBlocker/` lance le workflow GitHub Actions
+« TelBlocker APK ». Dans l'onglet *Actions* du dépôt, ouvrez le dernier run et
+téléchargez l'artefact `TelBlocker-apk` (zip contenant `app-debug.apk`).
 Sur le téléphone, autorisez l'installation depuis votre navigateur / gestionnaire de fichiers.
 
 Compiler soi-même (JDK 17 + Android SDK) :
 
 ```sh
-cd TelemetryBlocker
+cd TelBlocker
 ./gradlew assembleDebug
 # -> app/build/outputs/apk/debug/app-debug.apk
 ```

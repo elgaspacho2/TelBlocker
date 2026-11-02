@@ -1,5 +1,7 @@
 # TelBlocker
 
+**English** · [Français](README.fr.md)
+
 **Per-app telemetry blocker for Android, no root required.**
 
 TelBlocker lets you choose, app by app, what gets to phone home. You can block only
@@ -42,7 +44,7 @@ to any remote server. The VPN applies only to the apps you selected.
 ## Install
 
 1. Go to the [Actions](../../actions) tab, open the latest successful
-   **TelemetryBlocker APK** run and download the `TelemetryBlocker-apk` artifact.
+   **TelBlocker APK** run and download the `TelBlocker-apk` artifact.
 2. Unzip it and copy `app-debug.apk` to your phone.
 3. Open the APK and allow installs from your browser or file manager when asked.
 4. In the app, choose a mode for the apps you want, tap **Activer la protection**,
@@ -53,7 +55,7 @@ to any remote server. The VPN applies only to the apps you selected.
 Requirements: JDK 17 and the Android SDK.
 
 ```sh
-cd TelemetryBlocker
+cd TelBlocker
 ./gradlew assembleDebug
 # → app/build/outputs/apk/debug/app-debug.apk
 ```
@@ -80,7 +82,7 @@ cd TelemetryBlocker
 ## Project layout
 
 ```
-TelemetryBlocker/                 Android app (Kotlin, no external dependencies)
+TelBlocker/                       Android app (Kotlin, no external dependencies)
   app/src/main/java/...           VPN service, packet/DNS handling, UI
   app/src/main/assets/            Built-in telemetry domain list
 .github/workflows/                CI build that produces the APK
